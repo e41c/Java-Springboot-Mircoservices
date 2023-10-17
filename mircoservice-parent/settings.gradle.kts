@@ -1,0 +1,1 @@
+rootProject.name = "mircoservice-parent"
