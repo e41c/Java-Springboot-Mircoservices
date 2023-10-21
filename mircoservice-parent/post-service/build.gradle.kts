@@ -22,6 +22,7 @@ repositories {
 }
 
 dependencies {
+    implementation("org.modelmapper:modelmapper:3.2.0")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
     implementation("org.springframework.boot:spring-boot-starter-web")
@@ -29,6 +30,9 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation ("org.testcontainers:testcontainers:1.18.1")
+    testImplementation ("org.testcontainers:junit-jupiter:1.18.1")
+    testImplementation ("org.testcontainers:mongodb:1.18.1")
 }
 
 tasks.withType<Test> {
