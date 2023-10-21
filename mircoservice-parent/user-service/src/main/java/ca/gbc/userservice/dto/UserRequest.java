@@ -13,10 +13,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class UserRequest {
-
     private String username;
     private String email;
-    private List<UserLineItemDto> orderLineItemDtoList =
+    private List<UserLineItemDto> userLineItemDtos =
             new ArrayList<UserLineItemDto>();
 
     }

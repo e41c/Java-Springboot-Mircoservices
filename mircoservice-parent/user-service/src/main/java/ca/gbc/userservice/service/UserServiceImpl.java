@@ -13,13 +13,14 @@ import org.springframework.data.jpa.repository.support.QuerydslJpaRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class UserServiceImpl implements UserService {
-    private final QuerydslJpaRepository querydslJpaRepository;
     private final UserRepository userRepository;
 
     @Override
@@ -34,7 +35,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String updateUser(String userId, UserRequest userRequest) {
-        return null;
+        Optional<User> optionalUser = userRepository.findById(Long.valueOf(userId));
+
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
+            user.setUsername(userRequest.getUsername());
+            user.setEmail(userRequest.getEmail());
+            userRepository.save(user);
+            return "User updated successfully";
+        } else {
+            return "User not found";
+        }
     }
 
     @Override
@@ -44,15 +55,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponse> getAllUsers() {
-        List<User> user = userRepository.findAll();
-        return user.stream().map(this::mapToDto).toList();
+        List<User> users = userRepository.findAll();
+        return users.stream().map(this::mapToDto).collect(Collectors.toList());
     }
 
-    private UserLineItem mapToDto(UserLineItem userLineItem){
-        UserLineItem userLineItem1 = new UserLineItem();
-        userLineItem1.setUsername(userLineItem.getUsername());
-        userLineItem1.setEmail(userLineItem.getEmail());
-        return userLineItem1;
+    private UserResponse mapToDto(User user) {
+        UserResponse userResponse = new UserResponse();
+        userResponse.setId(user.getId());
+        userResponse.setUsername(user.getUsername());
+        userResponse.setEmail(user.getEmail());
+        return userResponse;
     }
 
 }
