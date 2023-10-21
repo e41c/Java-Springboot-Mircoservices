@@ -59,14 +59,18 @@ public class PostServiceimpl implements PostService{
 
     @Override
     public List<PostResponse> getAllPosts() {
+        log.info("Getting all posts");
         List<Post> posts = postRepository.findAll();
-        return mapPostToDto(posts);
+        return posts.stream().map(this::mapToDto).toList();
     }
-    private ModelMapper modelMapper;
 
-    public List<PostResponse> mapPostToDto(List<Post> posts) {
-        return posts.stream()
-                .map(post -> modelMapper.map(post, PostResponse.class))
-                .collect(Collectors.toList());
+    private PostResponse mapToDto(Post post) {
+        return PostResponse.builder()
+                .id(post.getId())
+                .postTitle(post.getPostTitle())
+                .postContent(post.getPostContent())
+                .postAuthor(post.getPostAuthor())
+                .postDate(post.getPostDate())
+                .build();
     }
 }

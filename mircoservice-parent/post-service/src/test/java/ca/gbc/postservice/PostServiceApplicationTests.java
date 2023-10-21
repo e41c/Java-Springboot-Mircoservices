@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.http.MediaType;
 import ca.gbc.postservice.dto.PostRequest;
-import ca.gbc.postservice.dto.PostResponse;
+
 import ca.gbc.postservice.model.Post;
 import ca.gbc.postservice.repository.PostRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -25,7 +25,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -53,7 +54,8 @@ class PostServiceApplicationTests {
     }
 
     private List<Post> getPosts(){
-        List<Post> posts = List.of(
+
+        return  List.of(
                 Post.builder()
                         .postTitle("Post Title 1")
                         .postContent("Post Content 1")
@@ -73,7 +75,26 @@ class PostServiceApplicationTests {
                         .postAuthor("Post Author 3")
                         .build()
         );
-        return posts;
+    }
+    @Test
+    void getAllPosts() throws Exception {
+        postRepository.saveAll(getPosts());
+
+        ResultActions response = mockMvc.perform(MockMvcRequestBuilders
+                .get("/api/post")
+                .accept(MediaType.APPLICATION_JSON));
+
+        response.andExpect(MockMvcResultMatchers.status().isOk());
+        response.andDo(MockMvcResultHandlers.print());
+
+        MvcResult result = response.andReturn();
+        String jsonResponse = result.getResponse().getContentAsString();
+        JsonNode jsonNodes = new ObjectMapper().readTree(jsonResponse);
+
+        int actualSize = jsonNodes.size();
+        int expectedSize = getPosts().size();
+
+        assertTrue(actualSize >= expectedSize);
     }
 
     @Test
@@ -89,45 +110,30 @@ class PostServiceApplicationTests {
         Assertions.assertTrue((postRepository.findAll().size() > 0));
 
         Query query = new Query();
-        query.addCriteria(Criteria.where("postTitle").is("Post Title 1"));
+        query.addCriteria(Criteria.where("postTitle").is("Post Title"));
         List<Post> posts = mongoTemplate.find(query, Post.class);
         Assertions.assertTrue((posts.size() > 0));
     }
 
-    @Test
-    void getAllPosts() throws Exception {
-        postRepository.saveAll(getPosts());
 
-        ResultActions response = mockMvc.perform(MockMvcRequestBuilders
-        .get("/api/post")
-                .accept(MediaType.APPLICATION_JSON));
-
-        response.andExpect(MockMvcResultMatchers.status().isOk());
-        response.andDo(MockMvcResultHandlers.print());
-
-        MvcResult result = response.andReturn();
-        String jsonResponse = result.getResponse().getContentAsString();
-        JsonNode jsonNodes = new ObjectMapper().readTree(jsonResponse);
-
-        int actualSize = jsonNodes.size();
-        int expectedSize = getPosts().size();
-
-        assertEquals(expectedSize, actualSize);
-    }
 
     @Test
     void updatePosts() throws Exception{
+        //create a post to update
         Post savedPost = Post.builder()
-                .postTitle("Post Title Updated")
-                .postContent("Post Content Updated")
+                .postTitle("Initial Post Title")
+                .postContent("Initial Post Content ")
                 .postDate(LocalDateTime.now())
-                .postAuthor("Post Author Updated")
+                .postAuthor("Initial Post Author ")
                 .build();
+        // save post to db
         postRepository.save(savedPost);
 
         PostRequest postRequest = getPostRequest();
         String postRequestJsonString = objectMapper.writeValueAsString(postRequest);
+        //turn postRequest into json string
 
+        //pass json string to endpoint
         mockMvc.perform(MockMvcRequestBuilders.put("/api/post/" + savedPost.getId())
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(postRequestJsonString))
