@@ -1,0 +1,54 @@
+package ca.gbc.postservice.controller;
+
+import ca.gbc.postservice.dto.PostRequest;
+import ca.gbc.postservice.dto.PostResponse;
+import ca.gbc.postservice.service.PostServiceimpl;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("api/post")
+@RequiredArgsConstructor
+public class PostController {
+    private final PostServiceimpl postService;
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createPost(@RequestBody PostRequest postRequest){
+        postService.createPost(postRequest);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<PostResponse> getAllPosts(){
+        return postService.getAllPosts();
+
+    }
+
+    @PutMapping({"/{id}"})
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> updatePost(@PathVariable("id") String id,
+                                           @RequestBody PostRequest postRequest){
+        String updatedPostId = postService.updatePost(id,postRequest);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Location", "api/post/"+ updatedPostId);
+
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> deletePost(@PathVariable("id") String id){
+        postService.deletePost(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+
+    }
+
+
+}
