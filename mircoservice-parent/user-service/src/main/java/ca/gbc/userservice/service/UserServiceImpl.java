@@ -21,7 +21,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void createUser(UserRequest userRequest) {
         User user = User.builder()
-                .name(userRequest.getUserName())
+                .username(userRequest.getUsername())
                 .email(userRequest.getEmail())
                 .build();
 
