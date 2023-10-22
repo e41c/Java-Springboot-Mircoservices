@@ -1,0 +1,42 @@
+version: "3.8"
+services:
+  post-service:
+    image: post-service
+    ports:
+      - "8080:8080"
+    build:
+      context: ./post-service
+      dockerfile: ./Dockerfile
+    container_name: post-service
+    environment:
+      - SPRING_PROFILE_ACTIVE=docker
+    links:
+      - mongodb
+    networks:
+        - spring
+
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=rootadmin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - ./data/mongo/posts:/data/db
+      - ./init/mongo/docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    container_name: mongodb
+    restart: unless-stopped
+    command: mongod --auth
+    networks:
+        - spring
+
+networks:
+    spring:
+        driver: bridge
+
+volumes:
+    mongodb:
+        driver: local
+
