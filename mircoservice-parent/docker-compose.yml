@@ -1,42 +1,103 @@
-version: "3.8"
+version: "3.0"
+
 services:
+
+  # ==== MONGODB ====
+  mongodb:
+    image: mongo:latest
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: rootadmin
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - ./data/mongo/products:/data/db
+      - ./init/mongo/docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    container_name: mongodb-social
+    command: mongod --auth
+    networks:
+      - spring
+
+  # ==== POSTGRESQL ====
+  user-postgresdb:
+    image: postgres:latest
+    container_name: user-postgresdb
+    volumes:
+      - ./data/postgresql/user-data:/var/lib/postgresql/data  # Change the volume path to avoid conflicts
+    ports:
+      - 8000:5432
+    restart: always
+    environment:
+      POSTGRES_USER: rootadmin
+      POSTGRES_PASSWORD: password
+    networks:
+      - spring
+
+  comment-postgresdb:
+    image: postgres:latest
+    container_name: comment-postgresdb
+    volumes:
+      - ./data/postgresql/comment-data:/var/lib/postgresql/data  # Change the volume path to avoid conflicts
+    ports:
+      - 8001:5432  # Change the port to avoid conflicts
+    restart: always
+    environment:
+      POSTGRES_USER: rootadmin
+      POSTGRES_PASSWORD: password
+    networks:
+      - spring
+
+  # ==== POSTGRESQL ====
+
+  user-service:
+    image: user-service:1.0
+    ports:
+      - "8083:8080"
+    build:
+      context: ./user-service
+      dockerfile: ./Dockerfile
+    container_name: user-service
+    restart: on-failure
+    environment:
+      SPRING_PROFILES_ACTIVE: docker  # Correct the typo in the environment variable
+    depends_on:
+      - user-postgresdb  # Change to user-postgresdb, which matches the service name
+    networks:
+      - spring
+
   post-service:
-    image: post-service
+    image: post-service:1.0
     ports:
       - "8080:8080"
     build:
       context: ./post-service
       dockerfile: ./Dockerfile
     container_name: post-service
+    restart: on-failure
     environment:
-      - SPRING_PROFILE_ACTIVE=docker
-    links:
-      - mongodb
+      SPRING_PROFILES_ACTIVE: docker  # Correct the typo in the environment variable
+    depends_on:
+      - mongodb  # Change to mongodb, which matches the service name
     networks:
-        - spring
+      - spring
 
-
-  mongodb:
-    image: mongo:latest
+  comment-service:
+    image: comment-service:1.0
     ports:
-      - "27017:27017"
+      - "8087:8080"
+    build:
+      context: ./comment-service
+      dockerfile: ./Dockerfile
+    container_name: comment-service
+    restart: on-failure
     environment:
-      - MONGO_INITDB_ROOT_USERNAME=rootadmin
-      - MONGO_INITDB_ROOT_PASSWORD=password
-    volumes:
-      - ./data/mongo/posts:/data/db
-      - ./init/mongo/docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    container_name: mongodb
-    restart: unless-stopped
-    command: mongod --auth
+      SPRING_PROFILES_ACTIVE: docker  # Correct the typo in the environment variable
+    depends_on:
+      - comment-postgresdb  # Change to comment-postgresdb, which matches the service name
     networks:
-        - spring
+      - spring
 
 networks:
-    spring:
-        driver: bridge
-
-volumes:
-    mongodb:
-        driver: local
-
+  spring:
+    driver: bridge
