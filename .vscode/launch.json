@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "UserServiceApplication",
+            "request": "launch",
+            "mainClass": "UserServiceApplication",
+            "projectName": "mircoservice-parent"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-MircoserviceParentApplication<mircoservice-parent>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "ca.gbc.mircoserviceparent.MircoserviceParentApplication",
+            "projectName": "mircoservice-parent",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

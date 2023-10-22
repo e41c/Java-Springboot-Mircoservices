@@ -55,14 +55,24 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void deleteComment(String commentId) { commentRepository
-            .deletebyId(Long.parseLong(commentId));
+    public void deleteComment(String commentId) {
+        commentRepository.deleteById(Long.parseLong(commentId)); // there was a typo here
 
     }
 
     @Override
     public List<CommentResponse> getAllComments() {
         List<Comment> comments = commentRepository.findAll();
-        return comments.stream().map(this::mapToDto).collect(Collectors.toList());
+        return comments.stream().map(this::mapToDto).collect(Collectors.toList()); // this methods wasn't declared
+    }
+
+    public CommentResponse mapToDto(Comment comment) {
+        return CommentResponse.builder()
+                .commentTitle(comment.getCommentTitle())
+                .commentContent(comment.getCommentContent())
+                .commentAuthor(comment.getCommentAuthor())
+                .commentDate(comment.getCommentDate())
+                .commentPostId(comment.getCommentPostId())
+                .build();
     }
 }
