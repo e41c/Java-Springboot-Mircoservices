@@ -14,7 +14,7 @@ services:
     volumes:
       - ./data/mongo/products:/data/db
       - ./init/mongo/docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
-    container_name: mongodb-social
+    container_name: post-mongodb
     command: mongod --auth
     networks:
       - spring
@@ -40,7 +40,7 @@ services:
     volumes:
       - ./data/postgresql/comment-data:/var/lib/postgresql/data  # Change the volume path to avoid conflicts
     ports:
-      - 8001:5432  # Change the port to avoid conflicts
+      - 8001:5434  # Change the port to avoid conflicts
     restart: always
     environment:
       POSTGRES_USER: rootadmin
