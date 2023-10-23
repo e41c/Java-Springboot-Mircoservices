@@ -33,7 +33,7 @@ public class UserController {
     }
 
     // http:localhost:8080/api/user/1
-    @PutMapping({"/{userId}"})
+    @PutMapping({"/{userId}/"})
     public ResponseEntity<?> updateUser(@PathVariable("userId") String userId,
                                         @RequestBody UserRequest userRequest){
 
@@ -47,7 +47,7 @@ public class UserController {
 
     //http://localhost:8080/api/user/1
 
-    @DeleteMapping({"/{userId}"})
+    @DeleteMapping({"/{userId}/"})
     public ResponseEntity<?> deleteUser(@PathVariable("userId") String userId){
         userService.deleteUser(userId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

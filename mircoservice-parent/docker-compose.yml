@@ -53,7 +53,7 @@ services:
   user-service:
     image: user-service:1.0
     ports:
-      - "8083:8080"
+      - "8083:8083"
     build:
       context: ./user-service
       dockerfile: ./Dockerfile
@@ -85,7 +85,7 @@ services:
   comment-service:
     image: comment-service:1.0
     ports:
-      - "8087:8080"
+      - "8087:8087"
     build:
       context: ./comment-service
       dockerfile: ./Dockerfile
