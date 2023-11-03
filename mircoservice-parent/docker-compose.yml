@@ -1,8 +1,7 @@
-version: "3.0"
+version: "3.8" # Use the latest version of Docker Compose
 
 services:
-
-  # ==== MONGODB ====
+  # MONGODB
   mongodb:
     image: mongo:latest
     restart: unless-stopped
@@ -19,14 +18,14 @@ services:
     networks:
       - spring
 
-  # ==== POSTGRESQL ====
+  # POSTGRESQL for user service
   user-postgresdb:
     image: postgres:latest
     container_name: user-postgresdb
     volumes:
-      - ./data/postgresql/user-data:/var/lib/postgresql/data  # Change the volume path to avoid conflicts
+      - ./data/postgresql/user-data:/var/lib/postgresql/data
     ports:
-      - 8000:5432
+      - "8000:5432"
     restart: always
     environment:
       POSTGRES_USER: rootadmin
@@ -34,13 +33,15 @@ services:
     networks:
       - spring
 
+  # POSTGRESQL for comment service
   comment-postgresdb:
     image: postgres:latest
     container_name: comment-postgresdb
     volumes:
-      - ./data/postgresql/comment-data:/var/lib/postgresql/data  # Change the volume path to avoid conflicts
+      - ./data/postgresql/comment-data:/var/lib/postgresql/data
+      - ./init/postgres/order-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - 8001:5434  # Change the port to avoid conflicts
+      - "8001:5434"
     restart: always
     environment:
       POSTGRES_USER: rootadmin
@@ -48,53 +49,54 @@ services:
     networks:
       - spring
 
-  # ==== POSTGRESQL ====
-
+  # User Service
   user-service:
-    image: user-service:1.0
-    ports:
-      - "8083:8083"
     build:
       context: ./user-service
       dockerfile: ./Dockerfile
+    image: user-service:1.0
+    ports:
+      - "8083:8083"
     container_name: user-service
     restart: on-failure
     environment:
-      SPRING_PROFILES_ACTIVE: docker  # Correct the typo in the environment variable
+      SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - user-postgresdb  # Change to user-postgresdb, which matches the service name
+      - user-postgresdb
     networks:
       - spring
 
+  # Post Service
   post-service:
-    image: post-service:1.0
-    ports:
-      - "8080:8080"
     build:
       context: ./post-service
       dockerfile: ./Dockerfile
+    image: post-service:1.0
+    ports:
+      - "8080:8080"
     container_name: post-service
     restart: on-failure
     environment:
-      SPRING_PROFILES_ACTIVE: docker  # Correct the typo in the environment variable
+      SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - mongodb  # Change to mongodb, which matches the service name
+      - mongodb
     networks:
       - spring
 
+  # Comment Service
   comment-service:
-    image: comment-service:1.0
-    ports:
-      - "8087:8087"
     build:
       context: ./comment-service
       dockerfile: ./Dockerfile
+    image: comment-service:1.0
+    ports:
+      - "8087:8087"
     container_name: comment-service
     restart: on-failure
     environment:
-      SPRING_PROFILES_ACTIVE: docker  # Correct the typo in the environment variable
+      SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - comment-postgresdb  # Change to comment-postgresdb, which matches the service name
+      - comment-postgresdb
     networks:
       - spring
 
