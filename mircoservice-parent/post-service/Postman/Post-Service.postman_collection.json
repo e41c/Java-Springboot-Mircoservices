@@ -12,7 +12,16 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": ""
+					"raw": "http://localhost:8080/api/post",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"post"
+					]
 				}
 			},
 			"response": []
@@ -24,7 +33,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"String\": \"Test Title 1\",\r\n    \"String\": \"Test Content 1\",\r\n    \"String\": \"Test Date 1\",\r\n    \"String\": \"Test Author 1\"\r\n}",
+					"raw": "{\r\n    \"postTitle\": \"Sample Post Title\",\r\n    \"postContent\": \"This is the content of the sample post.\",\r\n    \"postDate\": \"2023-11-03T12:00:00\", \r\n    \"postAuthor\": \"John Doe\"\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -53,7 +62,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"postTitle\": \"Test Title updated\",\r\n    \"postContent\": \"Test Content updated\",\r\n    \"postDate\": \"2024-10-21T17:06:15.809Z\",\r\n    \"postAuthor\": \"Test Author updated\"\r\n}",
+					"raw": "{\r\n    \"postTitle\": \"Updated Post Title\",\r\n    \"postContent\": \"This is the content of the updated post.\",\r\n    \"postDate\": \"2023-11-03T12:00:00\", \r\n    \"postAuthor\": \"Updated John Doe\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -61,7 +70,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/post/653404239193d167016c1d1b",
+					"raw": "http://localhost:8080/api/post/6545a260ecf5b56785cc7dc6",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -70,7 +79,7 @@
 					"path": [
 						"api",
 						"post",
-						"653404239193d167016c1d1b"
+						"6545a260ecf5b56785cc7dc6"
 					]
 				}
 			},
@@ -82,7 +91,7 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/post/653404239193d167016c1d1b",
+					"raw": "http://localhost:8080/api/post/6545a260ecf5b56785cc7dc6",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -91,7 +100,7 @@
 					"path": [
 						"api",
 						"post",
-						"653404239193d167016c1d1b"
+						"6545a260ecf5b56785cc7dc6"
 					]
 				}
 			},
