@@ -12,12 +12,12 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/user",
+					"raw": "http://localhost:8083/api/user",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"api",
 						"user"
@@ -33,7 +33,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"e41c\",\r\n    \"email\": \"e41c@example.com\"\r\n}",
+					"raw": "{\r\n    \"username\": \"ggg\",\r\n    \"email\": \"ggg@example.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -41,12 +41,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/user",
+					"raw": "http://localhost:8083/api/user",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"api",
 						"user"
@@ -61,16 +61,17 @@
 				"method": "DELETE",
 				"header": [],
 				"url": {
-					"raw": "http://localhost:8080/api/user/1",
+					"raw": "http://localhost:8083/api/user/202/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"api",
 						"user",
-						"1"
+						"202",
+						""
 					]
 				}
 			},
@@ -83,7 +84,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\": \"updatedUsername\",\r\n    \"email\": \"updatedEmail@example.com\"\r\n}",
+					"raw": "{\r\n    \"username\": \"hhh\",\r\n    \"email\": \"hhh@example.com\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -91,16 +92,17 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/api/user/2",
+					"raw": "http://localhost:8083/api/user/202/",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8080",
+					"port": "8083",
 					"path": [
 						"api",
 						"user",
-						"2"
+						"202",
+						""
 					]
 				}
 			},
