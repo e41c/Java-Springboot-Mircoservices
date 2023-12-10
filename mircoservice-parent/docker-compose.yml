@@ -2,50 +2,65 @@ version: "3.8" # Use the latest version of Docker Compose
 
 services:
   # MONGODB
-  mongodb:
+  post-mongodb:
     image: mongo:latest
     restart: unless-stopped
     ports:
       - "27017:27017"
     environment:
-      MONGO_INITDB_ROOT_USERNAME: rootadmin
-      MONGO_INITDB_ROOT_PASSWORD: password
+      - MONGO_INITDB_ROOT_USERNAME=rootadmin
+      - MONGO_INITDB_ROOT_PASSWORD=password
     volumes:
-      - ./data/mongo/products:/data/db
-      - ./init/mongo/docker-entrypoint-initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - ./data/mongodb/post-service:/data/mongodb
+      - ./init/mongodb/post-service/init.js:/docker-entrypoint-initdb.d/init.js
     container_name: post-mongodb
+    hostname: post-mongodb
     command: mongod --auth
     networks:
       - spring
 
   # POSTGRESQL for user service
   user-postgresdb:
-    image: postgres:latest
+    image: postgres
     container_name: user-postgresdb
     volumes:
-      - ./data/postgresql/user-data:/var/lib/postgresql/data
+      - ./data/postgresql/user-data:/data/postgres
+      - ./init/postgres/user-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "8000:5432"
-    restart: always
+      - "5431:5432"
     environment:
-      POSTGRES_USER: rootadmin
-      POSTGRES_PASSWORD: password
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=user-service
     networks:
       - spring
 
   # POSTGRESQL for comment service
   comment-postgresdb:
-    image: postgres:latest
+    image: postgres
+    hostname: comment-postgresdb
     container_name: comment-postgresdb
     volumes:
-      - ./data/postgresql/comment-data:/var/lib/postgresql/data
-      - ./init/postgres/order-service/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./data/postgresql/comment-data:/data/postgres
+      - ./init/postgres/comment-service/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "8001:5434"
-    restart: always
+      - "5433:5432"
     environment:
-      POSTGRES_USER: rootadmin
-      POSTGRES_PASSWORD: password
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=comment-service
+    networks:
+      - spring
+
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - "8888:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=user@domain.ca
+      - PGADMIN_DEFAULT_PASSWORD=password
+    container_name: pgadmin-spring-social
+    restart: unless-stopped
     networks:
       - spring
 
@@ -79,7 +94,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - mongodb
+      - post-mongodb
     networks:
       - spring
 
