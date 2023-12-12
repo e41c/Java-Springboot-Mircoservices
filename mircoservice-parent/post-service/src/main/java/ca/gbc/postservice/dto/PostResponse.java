@@ -17,6 +17,6 @@ public class PostResponse {
     private String postTitle;
     private String postContent;
     private LocalDateTime postDate;
-    private String postAuthor;
+    private String userEmail;
 
 }

@@ -26,6 +26,12 @@ public class UserController {
         userService.createUser(userRequest);
     }
 
+    @GetMapping({"/{userEmail}"})
+    @ResponseStatus(HttpStatus.OK)
+    public UserResponse getUser(@PathVariable("userEmail") String userEmail){
+        return userService.getUser(userEmail);
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<UserResponse> getAllUsers(){

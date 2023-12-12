@@ -49,7 +49,7 @@ class PostServiceApplicationTests {
                 .postTitle("Post Title")
                 .postContent("Post Content")
                 .postDate(LocalDateTime.now())
-                .postAuthor("Post Author")
+                .userEmail("Post Author")
                 .build();
     }
 
@@ -60,19 +60,19 @@ class PostServiceApplicationTests {
                         .postTitle("Post Title 1")
                         .postContent("Post Content 1")
                         .postDate(LocalDateTime.now())
-                        .postAuthor("Post Author 1")
+                        .userEmail("Post Author 1")
                         .build(),
                 Post.builder()
                         .postTitle("Post Title 2")
                         .postContent("Post Content 2")
                         .postDate(LocalDateTime.now())
-                        .postAuthor("Post Author 2")
+                        .userEmail("Post Author 2")
                         .build(),
                 Post.builder()
                         .postTitle("Post Title 3")
                         .postContent("Post Content 3")
                         .postDate(LocalDateTime.now())
-                        .postAuthor("Post Author 3")
+                        .userEmail("Post Author 3")
                         .build()
         );
     }
@@ -124,7 +124,7 @@ class PostServiceApplicationTests {
                 .postTitle("Initial Post Title")
                 .postContent("Initial Post Content ")
                 .postDate(LocalDateTime.now())
-                .postAuthor("Initial Post Author ")
+                .userEmail("Initial Post Author ")
                 .build();
         // save post to db
         postRepository.save(savedPost);
@@ -145,7 +145,7 @@ class PostServiceApplicationTests {
 
         Assertions.assertEquals(postRequest.getPostTitle(), post.getPostTitle());
         Assertions.assertEquals(postRequest.getPostContent(), post.getPostContent());
-        Assertions.assertEquals(postRequest.getPostAuthor(), post.getPostAuthor());
+        Assertions.assertEquals(postRequest.getUserEmail(), post.getUserEmail());
         Assertions.assertEquals(postRequest.getPostDate(), post.getPostDate());
     }
 
