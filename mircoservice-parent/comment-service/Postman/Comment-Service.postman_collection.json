@@ -1,13 +1,13 @@
 {
 	"info": {
-		"_postman_id": "9d5f74f2-8639-4a46-b6e1-7a55378c0692",
-		"name": "User-Service",
+		"_postman_id": "cd99e379-0fcb-456c-871e-f6e4d97cae48",
+		"name": "Comment-Service",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "29566153"
 	},
 	"item": [
 		{
-			"name": "Read-User",
+			"name": "Read-Comment",
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -27,7 +27,7 @@
 			"response": []
 		},
 		{
-			"name": "Add-User",
+			"name": "Add-Comment",
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -56,7 +56,7 @@
 			"response": []
 		},
 		{
-			"name": "Del-User",
+			"name": "Del-Comment",
 			"request": {
 				"method": "DELETE",
 				"header": [],
@@ -78,7 +78,7 @@
 			"response": []
 		},
 		{
-			"name": "Update-User",
+			"name": "Update-Comment",
 			"request": {
 				"method": "PUT",
 				"header": [],

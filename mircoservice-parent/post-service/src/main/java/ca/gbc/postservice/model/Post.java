@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Document(collection = "post")
+@Document(value = "post")
 public class Post {
     @Id
     private String id;
@@ -23,7 +23,7 @@ public class Post {
     private String postTitle;
     private String postContent;
     private LocalDateTime postDate;
-    private String postAuthor;
+    private String userEmail;
 
 
 }

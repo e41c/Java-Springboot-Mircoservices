@@ -22,28 +22,28 @@ public class User {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<User> userLineItemList;
 
-
-    // Constructor
-    public User(String username, String email, List<User> userLineItemList) {
-        this.username = username;
-        this.email = email;
-        this.userLineItemList = userLineItemList;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setUserLineItemList(List<User> userLineItemList) {
-        this.userLineItemList = userLineItemList;
-    }
+//
+//    // Constructor
+//    public User(String username, String email, List<User> userLineItemList) {
+//        this.username = username;
+//        this.email = email;
+//        this.userLineItemList = userLineItemList;
+//    }
+//
+//    public void setId(Long id) {
+//        this.id = id;
+//    }
+//
+//    public void setUsername(String username) {
+//        this.username = username;
+//    }
+//
+//    public void setEmail(String email) {
+//        this.email = email;
+//    }
+//
+//    public void setUserLineItemList(List<User> userLineItemList) {
+//        this.userLineItemList = userLineItemList;
+//    }
 
 }

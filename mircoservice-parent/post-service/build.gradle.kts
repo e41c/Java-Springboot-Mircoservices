@@ -30,9 +30,10 @@ dependencies {
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     annotationProcessor("org.projectlombok:lombok")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation ("org.testcontainers:testcontainers:1.18.1")
-    testImplementation ("org.testcontainers:junit-jupiter:1.18.1")
-    testImplementation ("org.testcontainers:mongodb:1.18.1")
+    implementation("org.springframework.boot:spring-boot-starter-webflux:3.1.5")
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.2.1")
+    implementation("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client:4.0.3")
+
 }
 
 tasks.withType<Test> {
