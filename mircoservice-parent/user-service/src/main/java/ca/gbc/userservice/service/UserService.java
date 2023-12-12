@@ -13,5 +13,7 @@ public interface UserService {
 
     void deleteUser(String userId);
 
+    UserResponse getUser(String userId);
+
     List<UserResponse> getAllUsers();
 }
