@@ -1,6 +1,30 @@
 version: "3.8" # Use the latest version of Docker Compose
 
 services:
+  #Keycloak
+  keycloak:
+    image: jboss/keycloak
+    ports:
+      - "8080:8080"
+    environment:
+      JBOSS_LOG_MANAGER_ROOT_LOGGER: DEBUG
+      DB_VENDOR: postgres
+      DB_ADDR: keycloak-postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: password
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/realms/spring-boot-microservices-realm.json
+    volumes:
+      - ./realms/:/opt/jboss/keycloak/realms
+    container_name: keycloak
+    depends_on:
+      - keycloak-postgres
+    restart: unless-stopped
+    networks:
+      - spring
+      -
   # MONGODB
   post-mongodb:
     image: mongo:latest
@@ -88,7 +112,7 @@ services:
       dockerfile: ./Dockerfile
     image: post-service:1.0
     ports:
-      - "8080:8080"
+      - "8081:8081"
     container_name: post-service
     restart: on-failure
     environment:
