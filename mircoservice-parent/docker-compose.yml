@@ -1,30 +1,25 @@
 version: "3.8" # Use the latest version of Docker Compose
 
 services:
-  #Keycloak
-  keycloak:
-    image: jboss/keycloak
-    ports:
-      - "8080:8080"
+  # @@@@@ DATABASES @@@@@@
+
+  #KEYCLOAK Postgres
+  keycloak-postgres:
+    container_name: keycloak-postgres
+    image: postgres
     environment:
-      JBOSS_LOG_MANAGER_ROOT_LOGGER: DEBUG
-      DB_VENDOR: postgres
-      DB_ADDR: keycloak-postgres
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_PASSWORD: password
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: password
-      KEYCLOAK_IMPORT: /opt/jboss/keycloak/realms/spring-boot-microservices-realm.json
+      POSTGRES_USER: keycloak
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: keycloak
+      PGDATA: /data/postgres
     volumes:
-      - ./realms/:/opt/jboss/keycloak/realms
-    container_name: keycloak
-    depends_on:
-      - keycloak-postgres
+      - ./data/postgres/keycloak-postgres:/data/postgres
+    ports:
+      - "5431:5432"
     restart: unless-stopped
     networks:
       - spring
-      -
+
   # MONGODB
   post-mongodb:
     image: mongo:latest
@@ -84,6 +79,31 @@ services:
       - PGADMIN_DEFAULT_EMAIL=user@domain.ca
       - PGADMIN_DEFAULT_PASSWORD=password
     container_name: pgadmin-spring-social
+    restart: unless-stopped
+    networks:
+      - spring
+
+# @@@@@ SERVICES @@@@@@
+  #Keycloak
+  keycloak:
+    image: jboss/keycloak
+    ports:
+      - "8080:8080"
+    environment:
+      JBOSS_LOG_MANAGER_ROOT_LOGGER: DEBUG
+      DB_VENDOR: postgres
+      DB_ADDR: keycloak-postgres
+      DB_DATABASE: keycloak
+      DB_USER: keycloak
+      DB_PASSWORD: password
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: password
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/realms/spring-boot-microservices-realm.json
+    volumes:
+      - ./realms/:/opt/jboss/keycloak/realms
+    container_name: keycloak
+    depends_on:
+      - keycloak-postgres
     restart: unless-stopped
     networks:
       - spring
