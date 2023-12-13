@@ -88,7 +88,7 @@ services:
       dockerfile: ./Dockerfile
     image: post-service:1.0
     ports:
-      - "8081:8081"
+      - "8080:8080"
     container_name: post-service
     restart: on-failure
     environment:
