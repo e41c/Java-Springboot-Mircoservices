@@ -1,6 +1,40 @@
 version: "3.8" # Use the latest version of Docker Compose
 
 services:
+    # API Gateway
+  spring-social-gateway:
+    image: spring-social-gateway:1.0
+    build:
+      context: ./api-gateway
+      dockerfile: ./Dockerfile
+    ports:
+        - "8182:8182"
+    container_name: spring-social-gateway
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+        - user-service
+        - post-service
+        - comment-service
+        - eureka-server
+    networks:
+        - spring
+
+    # EUREKA
+  eureka-server:
+    image: eureka-server:1.0
+    build:
+      context: ./eureka-server
+      dockerfile: ./Dockerfile
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    container_name: eureka-server
+    restart: unless-stopped
+    networks:
+      - spring
   # MONGODB
   post-mongodb:
     image: mongo:latest
@@ -77,6 +111,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
+      - eureka-server
       - user-postgresdb
     networks:
       - spring
