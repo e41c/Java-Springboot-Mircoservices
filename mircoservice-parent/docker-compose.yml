@@ -1,49 +1,40 @@
 version: "3.8" # Use the latest version of Docker Compose
 
 services:
-
-  #Keycloak
-  keycloak:
-    image: jboss/keycloak
+    # API Gateway
+  spring-social-gateway:
+    image: spring-social-gateway:1.0
+    build:
+      context: ./api-gateway
+      dockerfile: ./Dockerfile
     ports:
-      - "8080:8080"
+        - "8182:8182"
+    container_name: spring-social-gateway
+    restart: unless-stopped
     environment:
-      JBOSS_LOG_MANAGER_ROOT_LOGGER: DEBUG
-      DB_VENDOR: postgres
-      DB_ADDR: keycloak-postgres
-      DB_DATABASE: keycloak
-      DB_USER: keycloak
-      DB_PASSWORD: password
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: password
-      KEYCLOAK_IMPORT: /opt/jboss/keycloak/realms/spring-boot-microservices-realm.json
-    volumes:
-      - ./realms/:/opt/jboss/keycloak/realms
-    container_name: keycloak
+      SPRING_PROFILES_ACTIVE: docker
     depends_on:
-      - keycloak-postgres
-    restart: unless-stopped
+        - user-service
+        - post-service
+        - comment-service
+        - eureka-server
     networks:
-      - spring
+        - spring
 
-  #KEYCLOAK Postgres
-  keycloak-postgres:
-    container_name: keycloak-postgres-ss
-    image: postgres
-    environment:
-      POSTGRES_USER: keycloak
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: keycloak
-      PGDATA: /data/postgres
-    volumes:
-      - ./data/postgres/keycloak-postgres-ss:/data/postgres
+    # EUREKA
+  eureka-server:
+    image: eureka-server:1.0
+    build:
+      context: ./eureka-server
+      dockerfile: ./Dockerfile
     ports:
-      - "5434:5432"
+      - "8761:8761"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    container_name: eureka-server
     restart: unless-stopped
     networks:
       - spring
-
-
   # MONGODB
   post-mongodb:
     image: mongo:latest
@@ -120,6 +111,7 @@ services:
     environment:
       SPRING_PROFILES_ACTIVE: docker
     depends_on:
+      - eureka-server
       - user-postgresdb
     networks:
       - spring
@@ -131,7 +123,7 @@ services:
       dockerfile: ./Dockerfile
     image: post-service:1.0
     ports:
-      - "8081:8081"
+      - "8080:8080"
     container_name: post-service
     restart: on-failure
     environment:
