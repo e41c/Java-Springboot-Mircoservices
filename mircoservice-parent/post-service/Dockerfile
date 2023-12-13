@@ -33,6 +33,6 @@ COPY --from=build /home/gradle/src/build/libs/*.jar /app/post-service.jar
 ENV MONGO_DB_USERNAME=rootadmin \
     MONOGO_DB_PWD=password
 
-EXPOSE 8080
+EXPOSE 8081
 
 ENTRYPOINT ["java","-jar","/app/post-service.jar"]
